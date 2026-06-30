@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InterestLevel {
+  Low
+  Medium
+  High
+}
+
+enum LeadStatus {
+  New
+  Closed
+  Qualified
+  Contacted
+}
+
+enum LeadSource {
+  Referral
+  Website
+  ColdCall @map("Cold Call")
+  Event
+}
+
+model Lead {
+  leadId              Int           @id
+  name                String
+  contact             String
+  source              LeadSource
+  interestLevel       InterestLevel
+  status              LeadStatus
+  assignedSalesperson String
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([source])
+  @@index([interestLevel])
+  @@index([status])
+  @@index([assignedSalesperson])
+  @@index([name])
+}
